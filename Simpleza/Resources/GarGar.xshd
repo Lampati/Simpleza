@@ -1,0 +1,95 @@
+﻿<?xml version="1.0"?>
+<SyntaxDefinition name="Custom Highlighting" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="Comment" foreground="Green" />
+  <Color name="String" foreground="DarkOrange" />
+  <Color name="Tipo" foreground="LightGreen" />
+
+  <!-- This is the main ruleset. -->
+  <RuleSet ignoreCase="true">
+
+    <Span color="Comment" multiline="true" begin="{" end="}" />
+
+    <Span color="String">
+      <Begin>'</Begin>
+      <End>'</End>
+      <RuleSet>
+        <!-- nested span for escape sequences -->
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+
+    <Keywords fontWeight="bold" foreground="Blue" >
+      <Word>si</Word>
+      <Word>sino</Word>
+      <Word>and</Word>
+      <Word>comenzar</Word>
+      <Word>const</Word>
+      <Word>constantes</Word>
+      <Word>de</Word>
+      <Word>entonces</Word>
+      <Word>finfunc</Word>
+      <Word>finmientras</Word>
+      <Word>finproc</Word>
+      <Word>finsi</Word>
+      <Word>funcion</Word>
+      <Word>hacer</Word>
+
+      <Word>mientras</Word>
+
+      <Word>or</Word>
+      <Word>principal</Word>
+      <Word>procedimiento</Word>
+      <Word>salida</Word>
+      <Word>var</Word>
+      <Word>variables</Word>
+      <Word>ref</Word>
+      <Word>llamar</Word>
+
+
+      <!-- ... -->
+    </Keywords>
+
+    <Keywords fontWeight="bold" foreground="LightSlateGray" >
+      <Word>mostrarp</Word>
+      <Word>mostrar</Word>
+      <Word>leer</Word>      
+    </Keywords>
+
+    <Keywords fontWeight="bold" foreground="Firebrick">
+      <Word>arreglo</Word>
+      <Word>texto</Word>
+      <Word>booleano</Word>
+      <Word>numero</Word>
+    </Keywords>
+
+    <Keywords fontWeight="bold" foreground="Violet">
+      <Word>verdadero</Word>
+      <Word>falso</Word>
+    </Keywords>
+	
+	<Keywords fontWeight="bold" foreground="Red">
+      <Word>EsPar</Word>
+      <Word>EsImpar</Word>
+	  <Word>Truncar</Word>
+	  <Word>Redondear</Word>
+	  <Word>Potencia</Word>
+    <Word>Raiz</Word>
+    <Word>ValAbs</Word>
+    <Word>Seno</Word>
+    <Word>Coseno</Word>
+    <Word>Tangente</Word>
+    <Word>rSeno</Word>
+    <Word>rCoseno</Word>
+    <Word>rTangente</Word>
+    <Word>Pi</Word>
+    </Keywords>
+
+    <!-- Digits -->
+    <Rule foreground="SaddleBrown">
+
+      (    \d+       #or just starting with floating point
+      )
+
+    </Rule>
+  </RuleSet>
+</SyntaxDefinition>
