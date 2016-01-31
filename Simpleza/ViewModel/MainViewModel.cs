@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Views;
+using ICSharpCode.AvalonEdit.Document;
 using Simpleza.Helpers;
 using Simpleza.Interfases;
 using Simpleza.Model;
@@ -41,7 +42,61 @@ namespace Simpleza.ViewModel
         IMessageBoxService servicioMessageBox;
         IFileManagerDialogService servicioFileManager;
 
-      
+
+        public int PosicionActual
+        {
+            get
+            {
+                return posicionActual;
+            }
+            set
+            {
+                posicionActual = value;
+                RaisePropertyChanged("PosicionActual");
+                RaisePropertyChanged("LineaActual");
+                RaisePropertyChanged("ColumnaActual");
+            }
+        }
+
+        public int LineaActual
+        {
+            get
+            {
+                if (ArchivoActual != null && ArchivoActual.DocumentoActual !=null )
+                {
+                    TextLocation loc = ArchivoActual.DocumentoActual.GetLocation(PosicionActual);
+
+                    return loc.Line;
+                }
+
+                return 0;
+            }
+        }
+
+        public int ColumnaActual
+        {
+            get
+            {
+                if (ArchivoActual != null && ArchivoActual.DocumentoActual != null)
+                {
+                    TextLocation loc = ArchivoActual.DocumentoActual.GetLocation(PosicionActual);
+
+                    return loc.Column;
+                }
+
+                return 0;
+            }
+        }
+
+        public bool CompilacionCorrecta
+        {
+            get
+            {
+                return ListaMensajesCompilacion != null && listaMensajesCompilacion.Count == 0;
+                
+            }
+        }
+
 
         public Archivo ArchivoActual
         {
@@ -66,6 +121,8 @@ namespace Simpleza.ViewModel
             {
                 listaMensajesCompilacion = value;
                 RaisePropertyChanged("ListaMensajesCompilacion");
+                
+
             }
         }
 
@@ -102,9 +159,10 @@ namespace Simpleza.ViewModel
             ////}
 
             
-            ArchivoActual = new Archivo();
+            ArchivoActual = new Archivo();            
             ListaMensajesCompilacion = new ObservableCollection<MensajeCompilacion>();
 
+            
 
             CommandNew = new RelayCommand(New);
             CommandOpen = new RelayCommand(Open);
@@ -164,6 +222,7 @@ namespace Simpleza.ViewModel
                 ListaMensajesCompilacion.Add(new MensajeCompilacion(item));
             }
 
+            RaisePropertyChanged("CompilacionCorrecta");
             return res;
         }
 
@@ -196,6 +255,7 @@ namespace Simpleza.ViewModel
             if (string.IsNullOrEmpty(ArchivoActual.Ubicacion))
             {
                 ArchivoActual.Ubicacion = servicioFileManager.SaveFileDialog();
+
             }
 
             ArchivoActual.SalvarADisco();
@@ -228,6 +288,8 @@ namespace Simpleza.ViewModel
                 if (archNuevo != null)
                 {
                     ArchivoActual = archNuevo;
+                    ListaMensajesCompilacion.Clear();
+                    RaisePropertyChanged("CompilacionCorrecta");
                 }
 
             }
@@ -244,6 +306,8 @@ namespace Simpleza.ViewModel
             if (permitirNuevo)
             {
                 ArchivoActual = new Archivo();
+                ListaMensajesCompilacion.Clear();
+                RaisePropertyChanged("CompilacionCorrecta");
             }
         }
 

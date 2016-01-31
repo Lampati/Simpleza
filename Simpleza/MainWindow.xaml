@@ -6,7 +6,8 @@
         xmlns:res="clr-namespace:Simpleza.Resources"       
         xmlns:viewModels="clr-namespace:Simpleza.ViewModel"    
         xmlns:helpers="clr-namespace:Simpleza.Helpers"
-        xmlns:controls="clr-namespace:Simpleza.Controls"
+        xmlns:controls="clr-namespace:Simpleza.Controls"        
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         Title="{Binding Path=Resource1.sTitulo, Source={StaticResource LocalizedStrings }}" Height="650" Width="525" MinHeight="100"          
         DataContext="{Binding Main, Source={StaticResource Locator}}"
         >
@@ -129,19 +130,19 @@
 
 
 
-            <controls:MvvmTextEditor   Document="{Binding ArchivoActual.DocumentoActual, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     CaretOffset="{Binding PosicionActual, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+            <avalonedit:TextEditor   Document="{Binding ArchivoActual.DocumentoActual, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                                     
                                       ShowLineNumbers="True" FontFamily="Consolas" FontSize="10pt"                                      
-                HorizontalAlignment="Stretch" Margin="5" x:Name="textEditor" BorderThickness="1"
-                                       >
+                HorizontalAlignment="Stretch" Margin="5" x:Name="textEditor" BorderThickness="1" >
 
-                
-            
-                <controls:MvvmTextEditor.Options>
+                <avalonedit:TextEditor.Options>
                     <avalonedit:TextEditorOptions EnableHyperlinks="False" EnableEmailHyperlinks="False" AllowScrollBelowDocument="False"
                                                   EnableRectangularSelection="False" EnableTextDragDrop="False" CutCopyWholeLine="True"/>
-                </controls:MvvmTextEditor.Options>
-                <controls:MvvmTextEditor.ContextMenu>
+                </avalonedit:TextEditor.Options>
+
+                <i:Interaction.Behaviors>
+                    <controls:AvalonEditBehaviour CaretOffset="{Binding PosicionActual, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </i:Interaction.Behaviors>
+                <avalonedit:TextEditor.ContextMenu>
                     <ContextMenu>
                         <MenuItem Command="Undo" Header="Deshacer" />
                         <MenuItem Command="Redo" Header="Rehacer" />
@@ -153,8 +154,8 @@
                         <Separator />
                         <MenuItem Command="SelectAll" Header="Seleccionar todo"/>
                     </ContextMenu>
-                </controls:MvvmTextEditor.ContextMenu>
-            </controls:MvvmTextEditor>
+                </avalonedit:TextEditor.ContextMenu>
+            </avalonedit:TextEditor>
 
         </DockPanel>
 
@@ -164,7 +165,7 @@
         <Grid Grid.Row="2" HorizontalAlignment="Stretch" Margin="5,0" Name="grdResultados" Background="LightGray">
             <DataGrid ItemsSource="{Binding ListaMensajesCompilacion}" AutoGenerateColumns="False" 
                 CanUserReorderColumns="True" CanUserResizeColumns="True" CanUserResizeRows="False" CanUserSortColumns="True"
-                CanUserAddRows="False" CanUserDeleteRows="False">
+                CanUserAddRows="False" CanUserDeleteRows="False" >
 
 
                 <DataGrid.Columns>
@@ -185,31 +186,55 @@
                             <RowDefinition Height="25"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="6*"/>
                             <ColumnDefinition Width="4*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
-            <StatusBarItem>
+            <StatusBarItem Grid.Column="0">
                 <StackPanel Orientation="Horizontal">
-                    <Image Name="imgEstadoActualError" Width="15px" Height="15px" 
-                           Margin="0,0,5,0" Source="/Resources/cancel_48.png" Visibility="Collapsed"/>
-                    <Image Name="imgEstadoActualCorrecta" Width="15px" Height="15px" 
-                           Margin="0,0,5,0" Source="/Resources/accepted_48.png" Visibility="Collapsed"/>
-                    <TextBlock Name="EstadoActual">Listo</TextBlock>
+                    <Image  Name="imgEstadoActualError" Width="16px" Height="16px" 
+                           Margin="0,0,5,0"  >
+                        <Image.Style>
+                            <Style TargetType="{x:Type Image}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CompilacionCorrecta}" Value="True">
+                                        <Setter Property="Source" Value="/Resources/accepted_48.png" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding CompilacionCorrecta}" Value="False">
+                                        <Setter Property="Source" Value="/Resources/cancel_48.png" />
+                                    </DataTrigger>                                   
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>                  
+                    <TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CompilacionCorrecta}" Value="True">
+                                        <Setter Property="Text" Value="Listo" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding CompilacionCorrecta}" Value="False">
+                                        <Setter Property="Text" Value="Error" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </StackPanel>
             </StatusBarItem>
-            <StatusBarItem Grid.Column="1" Margin="0,0,25,0">
+            <StatusBarItem Grid.Column="1">
                 <TextBlock Text="{Binding ArchivoActual.Ubicacion}"></TextBlock>
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">
-                <TextBlock Text="{Binding ArchivoActual.Nombre}">Linea</TextBlock>
+                <TextBlock Text="{Binding LineaActual, Mode=OneWay, StringFormat=Linea: \{0\}}"></TextBlock>
             </StatusBarItem>
             <StatusBarItem Grid.Column="3">
-                <TextBlock Text="{Binding ArchivoActual.Nombre}">Columna</TextBlock>
+                <TextBlock Text="{Binding ColumnaActual, Mode=OneWay, StringFormat=Columna: \{0\}}"></TextBlock>
             </StatusBarItem>
         </StatusBar>
     </Grid>

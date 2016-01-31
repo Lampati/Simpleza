@@ -79,7 +79,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\MvvmTextEditor.cs" />
+    <Compile Include="Controls\AvalonEditBehavior.cs" />
     <Compile Include="Helpers\FileManagerDialogService.cs" />
     <Compile Include="Helpers\MessageBoxService.cs" />
     <Compile Include="Interfases\IFileManagerDialogService.cs" />
@@ -92,9 +92,7 @@
     <Compile Include="ViewModel\FindReplaceViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="View\AboutUsWindow.xaml.cs">
-      <DependentUpon>AboutUsWindow.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="View\AboutUsWindow.xaml.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -112,8 +110,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\AboutUsWindow.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +191,13 @@
   <ItemGroup>
     <Resource Include="Resources\right.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\accepted_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\cancel_48.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

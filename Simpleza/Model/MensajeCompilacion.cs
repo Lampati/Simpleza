@@ -18,7 +18,7 @@ namespace Simpleza.Model
             }
             set
             {
-                Set<string>(() => this.mensaje, ref mensaje, value);
+                Set<string>(() => this.Mensaje, ref mensaje, value);
             }
         }
 
@@ -31,7 +31,7 @@ namespace Simpleza.Model
             }
             set
             {
-                Set<int>(() => this.codigo, ref codigo, value);
+                Set<int>(() => this.Codigo, ref codigo, value);
             }
         }
 
@@ -44,7 +44,7 @@ namespace Simpleza.Model
             }
             set
             {
-                Set<int>(() => this.linea, ref linea, value);
+                Set<int>(() => this.Linea, ref linea, value);
             }
         }
 
@@ -58,7 +58,7 @@ namespace Simpleza.Model
             }
             set
             {
-                Set<int>(() => this.columna, ref columna, value);
+                Set<int>(() => this.Columna, ref columna, value);
             }
         }
 

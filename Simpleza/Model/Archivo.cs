@@ -25,7 +25,7 @@ namespace Simpleza.Model
             }
             set
             {
-                Set<TextDocument>(() => this.documentoActual, ref documentoActual, value);
+                Set<TextDocument>(() => this.DocumentoActual, ref documentoActual, value);
             }
         }
 
@@ -38,7 +38,7 @@ namespace Simpleza.Model
             }
             set
             {
-                Set<string>(() => this.ubicacion, ref ubicacion, value);
+                Set<string>(() => this.Ubicacion, ref ubicacion, value);
             }
         }
 

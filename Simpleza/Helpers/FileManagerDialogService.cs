@@ -17,6 +17,7 @@ namespace Simpleza.Helpers
             d.AddExtension = true;
             d.DefaultExt = "gar";
             d.Multiselect = false;
+            d.Filter = "Archivo GarGar (*.gar)|*.gar|Todos los Archivos (*.*)|*.*";
 
             if (d.ShowDialog() == true)
             {
@@ -33,6 +34,7 @@ namespace Simpleza.Helpers
             SaveFileDialog d = new SaveFileDialog();
             d.AddExtension = true;
             d.DefaultExt = "gar";
+            d.Filter = "Archivo GarGar (*.gar)|*.gar|Todos los Archivos (*.*)|*.*";
 
             if (d.ShowDialog() == true)
             {
