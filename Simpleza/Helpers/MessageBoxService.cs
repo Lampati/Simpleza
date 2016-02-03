@@ -10,7 +10,7 @@ namespace Simpleza.Helpers
 {
     public class MessageBoxService : IMessageBoxService
     {
-        public virtual bool ShowMessage(string text, string caption)
+        public virtual bool ShowMessageWithOptions(string text, string caption)
         {
             MessageBoxResult res = System.Windows.MessageBox.Show(text, caption, MessageBoxButton.YesNo);
 
@@ -26,6 +26,13 @@ namespace Simpleza.Helpers
                 default:
                     return false;
             }
+        }
+
+        public virtual void ShowMessage(string text, string caption)
+        {
+            System.Windows.MessageBox.Show(text, caption, MessageBoxButton.OK);
+
+          
         }
     }
 }

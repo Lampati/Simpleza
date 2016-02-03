@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -74,6 +75,7 @@ namespace Simpleza.ViewModel
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void CloseWindow(Window window)
         {
             if (window != null)

@@ -8,6 +8,9 @@ namespace Simpleza.Interfases
 {
     public interface IMessageBoxService
     {
-        bool ShowMessage(string text, string caption);
+        bool ShowMessageWithOptions(string text, string caption);
+
+        void ShowMessage(string text, string caption);
+
     }
 }

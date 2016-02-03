@@ -86,7 +86,7 @@
                     <MenuItem Command="{Binding CommandEjecutar}" Header="Ejecutar" InputGestureText="F5"/>
                 </MenuItem>
                 <MenuItem Header="A_yuda">
-                    <MenuItem Command="{Binding CommandHelp}"  Header="Ayuda Online" InputGestureText="F1"/>
+                    <MenuItem Command="{Binding CommandAbrirManual}"  Header="Manual GarGar " InputGestureText="F1"/>
                     <MenuItem Command="{Binding CommandAboutUs}" Header="Acerca de..." InputGestureText="Shift+F1"/>
                 </MenuItem>
             </Menu>
@@ -172,18 +172,24 @@
                     <DataGridTextColumn Binding="{Binding Path=Linea}" Header="Linea" IsReadOnly="True" />
                     <DataGridTextColumn Binding="{Binding Path=Columna}" Header="Columna" IsReadOnly="True" />
                     <DataGridTextColumn Binding="{Binding Path=Codigo}" Header="Codigo" IsReadOnly="True"/>
-                    <DataGridTextColumn Binding="{Binding Path=Mensaje}" Header="Mensaje" IsReadOnly="True"  Width="*"/>
-                    
+                    <DataGridTextColumn Binding="{Binding Path=Mensaje}" Header="Mensaje" IsReadOnly="True"  Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
                 </DataGrid.Columns>
             </DataGrid>
 
         </Grid>
-        <StatusBar Grid.Row="3"  >
+        <StatusBar Grid.Row="3" DockPanel.Dock="Bottom">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="22" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="6*"/>
@@ -194,7 +200,7 @@
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
-            <StatusBarItem Grid.Column="0">
+            <StatusBarItem Grid.Column="0" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
                     <Image  Name="imgEstadoActualError" Width="16px" Height="16px" 
                            Margin="0,0,5,0"  >
@@ -227,13 +233,13 @@
                     </TextBlock>
                 </StackPanel>
             </StatusBarItem>
-            <StatusBarItem Grid.Column="1">
+            <StatusBarItem Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock Text="{Binding ArchivoActual.Ubicacion}"></TextBlock>
             </StatusBarItem>
-            <StatusBarItem Grid.Column="2">
+            <StatusBarItem Grid.Column="2" VerticalAlignment="Center">
                 <TextBlock Text="{Binding LineaActual, Mode=OneWay, StringFormat=Linea: \{0\}}"></TextBlock>
             </StatusBarItem>
-            <StatusBarItem Grid.Column="3">
+            <StatusBarItem Grid.Column="3" VerticalAlignment="Center">
                 <TextBlock Text="{Binding ColumnaActual, Mode=OneWay, StringFormat=Columna: \{0\}}"></TextBlock>
             </StatusBarItem>
         </StatusBar>

@@ -8,7 +8,11 @@ using ICSharpCode.AvalonEdit.Document;
 using Simpleza.Helpers;
 using Simpleza.Interfases;
 using Simpleza.Model;
+using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -41,7 +45,8 @@ namespace Simpleza.ViewModel
 
         IMessageBoxService servicioMessageBox;
         IFileManagerDialogService servicioFileManager;
-
+        IPrinterService servicioImpresion;
+        IProcessStarterService servicioProcesos;
 
         public int PosicionActual
         {
@@ -127,7 +132,13 @@ namespace Simpleza.ViewModel
         }
 
 
-
+        public string PathManual
+        {
+            get
+            {
+                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Manuales", "ManualGargar_v1.pdf"); 
+            }
+        }
 
         public ICommand CommandNew { get; set; }
         public ICommand CommandOpen { get; set; }
@@ -142,12 +153,13 @@ namespace Simpleza.ViewModel
         public ICommand CommandCompilar { get; set; }
         public ICommand CommandEjecutar { get; set; }
 
-        public ICommand CommandHelp { get; set; }
+        public ICommand CommandAbrirManual { get; set; }
         public ICommand CommandAboutUs { get; set; }
 
 
 
-        public MainViewModel(IMessageBoxService servMsgBox, IFileManagerDialogService servFileManager)
+        public MainViewModel(IMessageBoxService servMsgBox, IFileManagerDialogService servFileManager,
+            IProcessStarterService servProcess, IPrinterService servImpr)
         {
             ////if (IsInDesignMode)
             ////{
@@ -163,7 +175,6 @@ namespace Simpleza.ViewModel
             ListaMensajesCompilacion = new ObservableCollection<MensajeCompilacion>();
 
             
-
             CommandNew = new RelayCommand(New);
             CommandOpen = new RelayCommand(Open);
             CommandSave = new RelayCommand(Save);
@@ -175,12 +186,14 @@ namespace Simpleza.ViewModel
             CommandCompilar = new RelayCommand(Compilar);
             CommandEjecutar = new RelayCommand(Ejecutar);
 
-            CommandHelp = new RelayCommand(Help);
+            CommandAbrirManual = new RelayCommand(AbrirManual);
             CommandAboutUs = new RelayCommand(AboutUs);
 
 
             servicioMessageBox = servMsgBox;
             servicioFileManager = servFileManager;
+            servicioImpresion = servImpr;
+            servicioProcesos = servProcess;
 
             compilador = new Compilador();
         }
@@ -192,9 +205,22 @@ namespace Simpleza.ViewModel
             Messenger.Default.Send(new NotificationMessage("ShowAboutUs"));
         }
 
-        public void Help()
+        public void AbrirManual()
         {
-            throw new System.NotImplementedException();
+
+            FileInfo fileInfo = new FileInfo(PathManual);
+
+            if (!fileInfo.Exists)
+            {
+                if (!fileInfo.Directory.Exists)
+                {
+                    Directory.CreateDirectory(fileInfo.Directory.FullName);
+                }
+
+                System.IO.File.WriteAllBytes(PathManual, Properties.Resources.ManualGarGar_v1);
+            }
+
+            servicioProcesos.StartProcess(fileInfo.FullName);
         }
 
         public void Ejecutar()
@@ -226,27 +252,41 @@ namespace Simpleza.ViewModel
             return res;
         }
 
-
+        [ExcludeFromCodeCoverage]
         public void Exit()
         {
             Application.Current.Shutdown();
         }
 
-        private void Print()
+        public void Print()
         {
-            PrintDialog printDialog = new PrintDialog();
-            FlowDocument doc = new FlowDocument(new Paragraph(new Run(ArchivoActual.DocumentoActual.Text)));
-            doc.Name = ArchivoActual.Nombre;
+            
+            servicioImpresion.AsignarDocumento(ArchivoActual.Nombre, ArchivoActual.DocumentoActual.Text);
 
-            doc.ColumnWidth = printDialog.PrintableAreaWidth;
-            doc.PagePadding = new Thickness(25);
+            bool? resultado = servicioImpresion.ElegirImpresora();
 
-            // Create IDocumentPaginatorSource from FlowDocument
-            IDocumentPaginatorSource idpSource = doc;
+            if (resultado.HasValue && resultado.Value)
+            {
+                servicioImpresion.Imprimir();
+            }
+            
+            //FlowDocument doc = new FlowDocument(new Paragraph(new Run(ArchivoActual.DocumentoActual.Text)));
+            //doc.Name = ArchivoActual.Nombre;
 
-            // Call PrintDocument method to send document to printer
+            
+            //doc.PagePadding = new Thickness(25);
 
-            printDialog.PrintDocument(idpSource.DocumentPaginator, "Documento Gargar");
+            //// Create IDocumentPaginatorSource from FlowDocument
+            //IDocumentPaginatorSource idpSource = doc;
+
+            //// Call PrintDocument method to send document to printer
+            //PrintDialog printDialog = new PrintDialog();
+            //doc.ColumnWidth = printDialog.PrintableAreaWidth;
+            //bool? imprimir = printDialog.ShowDialog();
+            //if (imprimir.HasValue && imprimir.Value)
+            //{
+            //    printDialog.PrintDocument(idpSource.DocumentPaginator, "Documento Gargar");
+            //}
         }
 
         public void Save()
@@ -276,7 +316,7 @@ namespace Simpleza.ViewModel
             bool permitirAbrir = true;
             if (!ArchivoActual.TextoActualGuardado)
             {
-                permitirAbrir = servicioMessageBox.ShowMessage("Esta seguro?", "hola");
+                permitirAbrir = servicioMessageBox.ShowMessageWithOptions("Esta seguro?", "hola");
             }
 
             if (permitirAbrir)
@@ -300,7 +340,7 @@ namespace Simpleza.ViewModel
             bool permitirNuevo = true;
             if (!ArchivoActual.TextoActualGuardado)
             {
-                permitirNuevo = servicioMessageBox.ShowMessage("Esta seguro?", "hola");
+                permitirNuevo = servicioMessageBox.ShowMessageWithOptions("Esta seguro?", "hola");
             }
 
             if (permitirNuevo)

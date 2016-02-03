@@ -81,13 +81,16 @@
     </ApplicationDefinition>
     <Compile Include="Controls\AvalonEditBehavior.cs" />
     <Compile Include="Helpers\FileManagerDialogService.cs" />
+    <Compile Include="Helpers\PrinterChooserService.cs" />
+    <Compile Include="Helpers\ProcessStarterService.cs" />
     <Compile Include="Helpers\MessageBoxService.cs" />
     <Compile Include="Interfases\IFileManagerDialogService.cs" />
+    <Compile Include="Interfases\IPrinterService.cs" />
+    <Compile Include="Interfases\IProcessStarterService.cs" />
     <Compile Include="Interfases\IMessageBoxService.cs" />
     <Compile Include="Model\Archivo.cs" />
     <Compile Include="Model\MensajeCompilacion.cs" />
     <Compile Include="Resources\LocalizedStrings.cs" />
-    <Compile Include="Resources\SearchPanelLocalization.cs" />
     <Compile Include="ViewModel\AboutUsViewModel.cs" />
     <Compile Include="ViewModel\FindReplaceViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -131,6 +134,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Manuales\ManualGarGar_v1.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

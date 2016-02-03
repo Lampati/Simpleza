@@ -14,7 +14,8 @@ namespace SimplezaTestProject
         {
             Archivo arch = new Archivo();
 
-            Assert.IsTrue(arch.DocumentoActual != null && string.IsNullOrEmpty(arch.DocumentoActual.Text));
+            Assert.IsTrue(arch.DocumentoActual != null);
+            Assert.IsTrue(string.IsNullOrEmpty(arch.DocumentoActual.Text));
 
         }
 
